@@ -1,4 +1,4 @@
-FROM databoxsystems/base-image-ocaml:alpine-3.4_ocaml-4.04.2 as BUILDER
+FROM databoxsystems2/base-image-ocaml:alpine-3.4_ocaml-4.04.2 as BUILDER
 
 WORKDIR /export-service
 ADD . .
