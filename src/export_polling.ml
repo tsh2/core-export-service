@@ -1,7 +1,6 @@
 open Export_typ
 open Opium.Std
 open Lwt.Infix
-open Str
 
 module R = Rresult.R
 module W = Export_worker
@@ -62,15 +61,7 @@ let get_timeout_param req =
 
 let export_lp f =
   let handler f req =
-   let bodyy = Request.body req in
-    let bb =bodyy in 
-     Cohttp_lwt_body.to_string bodyy >>= fun bb ->
-    Logs_lwt.info (fun m -> m "LLA(export_lp) export polling editing Body: %s" bb) >>= fun () ->
-    let origURL = "https://export.amar.io/" in
-    let newURL="http://52.246.188.12:8080/" in
-   let newstr= Str.global_replace (Str.regexp_string origURL) newURL bb in
-   let body= Cohttp_lwt_body.of_string newstr in
-   
+    let body = Request.body req in
     let client_id =
       let headers = Request.headers req in
       Cohttp.Header.get headers "macaroon-client-id"
