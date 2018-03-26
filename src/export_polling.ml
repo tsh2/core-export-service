@@ -65,7 +65,6 @@ let export_lp f =
  let bodyy = Request.body req in
     let bb =bodyy in 
      Cohttp_lwt_body.to_string bodyy >>= fun bb ->
-    Logs_lwt.info (fun m -> m "LLA(export_lp) export polling editing Body: %s" bb) >>= fun () ->
     let origURL = "https://export.amar.io" in
     let newURL="http://52.246.188.12:8080" in
    let newstr= Str.global_replace (Str.regexp_string origURL) newURL bb in
