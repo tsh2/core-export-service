@@ -193,9 +193,10 @@ let macaroon_verifier_mw =
     let uri = Request.uri req in
     let meth = Request.meth req in
     let headers = Request.headers req in
-	Cohttp_lwt_body.to_string headers >>= fun bh ->
-
-
+		let hhh =headers in 
+    Cohttp_lwt_body.to_string headers >>= fun hhh ->
+     Logs_lwt.info (fun m -> m "LLA macaroon inside post Request.headers top header  %s" hhh ) >>= fun () ->
+   
     let body = Request.body req in
     Cohttp_lwt_body.to_string body >>= fun b ->
     let dest = extract_destination b in
