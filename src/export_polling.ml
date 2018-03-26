@@ -62,9 +62,10 @@ let get_timeout_param req =
 
 let export_lp f =
   let handler f req =
+  let bodyy = Request.body req in
     let origURL = "https://export.amar.io" in
     let newURL="http://52.246.188.12:8080" in
-   let body= Str.global_replace (Str.regexp_string origURL) newURL Request.body req in
+   let body= Str.global_replace (Str.regexp_string origURL) newURL bodyy in
   
    
     let client_id =
