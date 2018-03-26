@@ -192,9 +192,8 @@ let macaroon_verifier_mw =
 
     let uri = Request.uri req in
     let meth = Request.meth req in
-    let headers = Request.headers req in
-      let tttt = Cohttp.Header.get headers "X-Api-Key" in
-     Logs_lwt.info (fun m -> m "LLA macaroon inside post Request.body top body  %s" tttt ) >>= fun () ->
+    let headers = req |> Request.headers |> Header.to_string in
+     Logs_lwt.info (fun m -> m "LLA macaroon inside post Request.body top body  %s" headers ) >>= fun () ->
      
     let body = Request.body req in
     Cohttp_lwt_body.to_string body >>= fun b ->
