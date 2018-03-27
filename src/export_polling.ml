@@ -68,6 +68,11 @@ let export_lp f =
       let headers = Request.headers req in
       Cohttp.Header.get headers "macaroon-client-id"
     in
+    
+    let headers22 = Request.headers req in
+    let h11 =Cohttp.Header.to_string headers22 in 
+     Logs_lwt.info (fun m -> m "LLA export polling inside post Request.header*****  %s" h11 ) >>= fun () ->
+	
     Cohttp_lwt_body.to_string body >>= fun body ->
     Logs_lwt.info (fun m -> m "body: %s" body) >>= fun () ->
 
