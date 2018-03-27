@@ -192,8 +192,8 @@ let macaroon_verifier_mw =
 
     let uri = Request.uri req in
     let meth = Request.meth req in
-    let headers =Cohttp.Request.headers req in
-   
+    let headers =Request.headers req in
+    Printf.printf "Headers: %s\n" (req |> Request.headers |> Header.to_string);
 	
     let body = Request.body req in
     Cohttp_lwt_body.to_string body >>= fun b ->
