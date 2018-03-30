@@ -244,6 +244,12 @@ let macaroon_request_checker request ~body =
   and meth = Cohttp.Request.meth request
   and headers = Cohttp.Request.headers request in
 
+  let h22 =Cohttp.Header.to_string headers in 
+     Logs_lwt.info (fun m -> m "LLA macaroon_request_checker Request.header top body  %s" h22 ) >>= fun () ->
+	
+	let u22=Uri.to_string uri in 
+     Logs_lwt.info (fun m -> m "LLA macaroon_request_checker Request.uri top body  %s" u22 ) >>= fun () ->
+	
   let macaroon = extract_macaroon headers in
   init_secret () >>= fun key ->
 
