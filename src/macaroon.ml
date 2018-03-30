@@ -9,7 +9,12 @@ let s = ref None
 
 let get_secret () =
   let endp = Uri.of_string (Export_env.arbiter_endp ()) in
+  let end11=Uri.to_string endp in 
+     Logs_lwt.info (fun m -> m "LLA macaroonUri.of_string Export_env.arbiter_endp  %s" end11 ) >>= fun () ->
+    
   let url = Uri.with_path endp "/store/secret" in
+let url11=Uri.to_string url in 
+     Logs_lwt.info (fun m -> m "LLA macaroon Uri.with_path endp  url  %s" url11 ) >>= fun () ->
 
   let h = ["X-Api-Key", Export_env.arbiter_token ()] in
   let headers = Cohttp.Header.of_list h in
