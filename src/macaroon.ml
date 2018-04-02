@@ -190,7 +190,11 @@ let with_client_id req id =
   let nr = Fieldslib.Field.fset Cohttp.Request.Fields.headers r headers in
   Request.({req with request = nr})
 
-
+let function1 data = 
+  match data with
+   None -> ""
+   | Some str -> str 
+   
 let macaroon_verifier_mw =
   let filter = fun handler req ->
     init_secret () >>= fun key ->
@@ -200,6 +204,12 @@ let macaroon_verifier_mw =
     let headers =Request.headers req in
     let h11 =Cohttp.Header.to_string headers in 
      Logs_lwt.info (fun m -> m "LLA macaroon inside post Request.header top body  %s" h11 ) >>= fun () ->
+	
+	 let hs =Cohttp.Header.get headers "X-Forwarded-For" in
+	let hh33=function1 hs in    
+   
+	 Logs_lwt.info (fun m -> m "LLA macaroon X-Forwarded-For Request.uri top body  %s" hh33 ) >>= fun () ->
+
 	
 	let u11=Uri.to_string uri in 
      Logs_lwt.info (fun m -> m "LLA macaroon inside post Request.uri top body  %s" u11 ) >>= fun () ->
