@@ -205,9 +205,13 @@ let macaroon_verifier_mw =
     let h11 =Cohttp.Header.to_string headers in 
      Logs_lwt.info (fun m -> m "LLA macaroon inside post Request.header top body  %s" h11 ) >>= fun () ->
 	
-	 let hs =Cohttp.Header.get headers "X-Forwarded-For" in
-	let hh33=function1 hs in    
-   
+	 let hs =Cohttp.Header.get headers "x-forwarded-for" in
+	let hh33=function1 hs in  
+	 
+	 let usera =Cohttp.Header.get headers "user-agent" in
+	let user22=function1 usera in  
+	
+    Logs_lwt.info (fun m -> m "LLA macaroon user-agent Request.uri  %s" user22 ) >>= fun () ->
 	 Logs_lwt.info (fun m -> m "LLA macaroon X-Forwarded-For Request.uri top body  %s" hh33 ) >>= fun () ->
 
 	
