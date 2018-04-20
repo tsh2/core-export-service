@@ -14,12 +14,13 @@ depends: [
   "ocamlfind"      {build}
   "ocamlbuild"     {build}
   "topkg"          {build}
-
+	
   "lwt"
   "tls"
   "opium"
   "cohttp"
   "websocket"
+  "yojson"
 
   "sodium"
   "fmt"
