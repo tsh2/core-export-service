@@ -1,11 +1,14 @@
 open Lwt
 open Opium.Std
+open Yojson.Basic.Util
+open Str
 
 module Client   = Cohttp_lwt_unix.Client
 module Macaroon = Sodium_macaroons
 module R        = Rresult.R
 
 let s = ref None
+
 
 let get_secret () =
   let endp = Uri.of_string (Export_env.arbiter_endp ()) in
@@ -190,10 +193,26 @@ let with_client_id req id =
   let nr = Fieldslib.Field.fset Cohttp.Request.Fields.headers r headers in
   Request.({req with request = nr})
 
+(*LLA added *)
 let function1 data = 
   match data with
    None -> ""
    | Some str -> str 
+   
+   (*LLA added Function for string contains app name*)
+let contains s1 s2 =
+    let re = Str.regexp_string s2
+    in
+        try ignore (Str.search_forward re s1 0); true
+        with Not_found -> false
+        
+        
+ let res_chk a1 a2 =
+    let re1 = Str.regexp_string a2
+    in
+        try ignore (Str.search_forward re1 a1 0); true
+        with Not_found -> false
+      
    
 let macaroon_verifier_mw =
   let filter = fun handler req ->
@@ -212,16 +231,51 @@ let macaroon_verifier_mw =
 	let user22=function1 usera in  
 	
     Logs_lwt.info (fun m -> m "LLA macaroon user-agent Request.uri  %s" user22 ) >>= fun () ->
-	 Logs_lwt.info (fun m -> m "LLA macaroon X-Forwarded-For Request.uri top body  %s" hh33 ) >>= fun () ->
-
+ 	 Logs_lwt.info (fun m -> m "LLA macaroon X-Forwarded-For Request.uri top body  %s" hh33 ) >>= fun () ->
 	
-	let u11=Uri.to_string uri in 
+	let u11=Uri.to_string uri in
      Logs_lwt.info (fun m -> m "LLA macaroon inside post Request.uri top body  %s" u11 ) >>= fun () ->
-	
+  
+  
     let body = Request.body req in
+    let b =body in     
     Cohttp_lwt_body.to_string body >>= fun b ->
+     Logs_lwt.info (fun m -> m "LLA macaroon inside post Request.body top body  %s" b ) >>= fun () ->
+   
+   let open Yojson.Basic.Util in
+   (* b |> Yojson.Basic.from_string |> *)
+  let jsonbb = Yojson.Basic.from_string b in
+ let id = jsonbb |> member "data" |> to_string in  
+Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" id ) >>= fun () ->
+   
     let dest = extract_destination b in
-
+        
+   Logs_lwt.info (fun m -> m "LLA EDITING START for body content and add new column  ") >>= fun () ->
+ 
+ 	let str1="data" in 
+ 	let str11="location" in 	
+ 	  	let os_monitor=contains b str1 in 
+ 	  	let twitt=contains b str11 in 
+ 	 Logs_lwt.info (fun m -> m "LLA macaroon this is str1(app-os-monitor)  %b" os_monitor) >>= fun () ->
+ 	 Logs_lwt.info (fun m -> m "LLA macaroon this is str11(twitter-app)  %b" twitt) >>= fun () ->
+ 	 	  	
+ 	 	   let   deviceId = "" in
+ 	 	  let  dataId = "" in
+ 			if os_monitor then (
+						deviceId = "os_monitor" ;
+						dataId = "memory" 
+						)else (if twitt then (
+						deviceId = "twitter";
+						dataId = "sentiment"
+						) 
+						else(
+						deviceId = "";
+						dataId = ""
+						);
+						);
+						Logs_lwt.info (fun m -> m "LLA deviceId is %s " deviceId) >>= fun () ->
+						Logs_lwt.info (fun m -> m "LLA dataId is %s " dataId) >>= fun () ->
+			
     let macaroon = extract_macaroon headers in
     let r = verify macaroon key uri meth dest in
     (*let r = R.ok true in*)
