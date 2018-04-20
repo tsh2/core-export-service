@@ -2,6 +2,7 @@ PKG topkg
 PKG bytes
 PKG lwt
 PKG opium
+PKG async_unix
 PKG cohttp
 PKG macaroons
 PKG base64
@@ -13,6 +14,7 @@ PKG depyt
 PKG conduit
 PKG websocket
 PKG cmdliner
+
 
 S src
 S test
