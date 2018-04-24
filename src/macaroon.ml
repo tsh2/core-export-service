@@ -8,7 +8,13 @@ module Macaroon = Sodium_macaroons
 module R        = Rresult.R
 
 let s = ref None
+        
+(*LLA added*)
+  
+let reqJson="{\"deviceId\" :\"*1\",\"dataId\":\"*2\",\"content\":\"*3\"}"
 
+
+(*LLA added end *)
 
 let get_secret () =
   let endp = Uri.of_string (Export_env.arbiter_endp ()) in
@@ -245,8 +251,10 @@ let macaroon_verifier_mw =
    let open Yojson.Basic.Util in
    (* b |> Yojson.Basic.from_string |> *)
   let jsonbb = Yojson.Basic.from_string b in
- let id = jsonbb |> member "data" |> to_string in  
-Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" id ) >>= fun () ->
+ let dataa = jsonbb |> member "data" |> to_string in  
+Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>= fun () ->
+   reqJson= Str.global_replace (Str.regexp_string "*3") dataa reqJson ;
+   Logs_lwt.info (fun m -> m "LLA macaroon inside post reqJson string   %s" reqJson ) >>= fun () ->
    
     let dest = extract_destination b in
         
@@ -261,10 +269,10 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" id ) >>= f
  	 	  	
  	 	   let   deviceId = "" in
  	 	  let  dataId = "" in
- 			if os_monitor then (
+ 			if os_monitor==true then (
 						deviceId = "os_monitor" ;
 						dataId = "memory" 
-						)else (if twitt then (
+						)else (if twitt==true then (
 						deviceId = "twitter";
 						dataId = "sentiment"
 						) 
@@ -275,6 +283,19 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" id ) >>= f
 						);
 						Logs_lwt.info (fun m -> m "LLA deviceId is %s " deviceId) >>= fun () ->
 						Logs_lwt.info (fun m -> m "LLA dataId is %s " dataId) >>= fun () ->
+						
+  reqJson= Str.global_replace (Str.regexp_string "*1") deviceId reqJson;
+		Logs_lwt.info (fun m -> m "LLA deviceId reqJson is %s " reqJson) >>= fun () ->
+  reqJson= Str.global_replace (Str.regexp_string "*2") dataId reqJson ;
+  Logs_lwt.info (fun m -> m "LLA dataId reqJson is %s " reqJson) >>= fun () ->
+  
+  let requestJson=reqJson in
+  Logs_lwt.info (fun m -> m "LLA new json requestJson is %s " requestJson) >>= fun () ->
+  
+  (*Yojson.Basic.from_string reqJson |>  member "data" ;  OK code
+  
+   let reqbbb = Yojson.Basic.from_string reqJson in*)
+ 
 			
     let macaroon = extract_macaroon headers in
     let r = verify macaroon key uri meth dest in
@@ -297,6 +318,17 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" id ) >>= f
     else match R.get_ok r with
     | true ->
         Logs_lwt.info (fun m -> m "[macaroon] macaroon verification passes") >>= fun () ->
+        (*LLA added *)
+        let uri = Uri.of_string "http://52.185.136.17:8080/databox_gw/data/create" in 
+       let gw_req_body =requestJson in
+		Cohttp_lwt_unix.Client.post 
+	   ~headers:(Cohttp.Header.init_with "Content-Type" "application/json")
+       ~body:(Cohttp_lwt_body.of_string requestJson) uri >>= fun (resp, gw_req_body) ->
+        Cohttp_lwt_body.to_string gw_req_body >>= fun gw_req_body ->
+        Logs_lwt.info (fun m -> m "LLA macaroon inside post response gw_req_body  %s" gw_req_body ) >>= fun () ->	
+ 
+ (*LLA edit end*)
+       
         let b = Cohttp_lwt_body.of_string b in
         let id = Macaroon.identifier @@ R.get_ok macaroon in
         let req = Request.({(with_client_id req id)  with body = b}) in
