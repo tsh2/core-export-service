@@ -267,8 +267,8 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str1(app-os-monitor)  %b" os_monitor) >>= fun () ->
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str11(twitter-app)  %b" twitt) >>= fun () ->
  	 	  	
- 	 	 let   deviceId = "" in
- 	 	  let  dataId = "" in
+ 	 	 let   deviceId = "AAAA" in
+ 	 	  let  dataId = "BBBB" in
  			if os_monitor==true then (
 						deviceId = "os_monitor" ;
 						dataId = "memory" 
