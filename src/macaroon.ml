@@ -11,7 +11,7 @@ let s = ref None
         
 (*LLA added*)
   
-let reqJson="{\"deviceId\" :\"*1\",\"dataId\":\"*2\",\"content\":\"*3\"}"
+let reqJson="{\"deviceId\" :\"*1\",\"dataId\":\"*2\",\"content\":*3}"
 
 
 (*LLA added end *)
