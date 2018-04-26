@@ -253,8 +253,8 @@ let macaroon_verifier_mw =
   let jsonbb = Yojson.Basic.from_string b in
  let dataa = jsonbb |> member "data" |> to_string in  
 Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>= fun () ->
-   reqJson= Str.global_replace (Str.regexp_string "*3") dataa reqJson ;
-   Logs_lwt.info (fun m -> m "LLA macaroon inside post reqJson string   %s" reqJson ) >>= fun () ->
+ let reqJsonContent= Str.global_replace (Str.regexp_string "*3") dataa reqJson in
+   Logs_lwt.info (fun m -> m "LLA macaroon inside post reqJson string content  %s" reqJsonContent ) >>= fun () ->
    
     let dest = extract_destination b in
         
@@ -267,25 +267,25 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str1(app-os-monitor)  %b" os_monitor) >>= fun () ->
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str11(twitter-app)  %b" twitt) >>= fun () ->
  	 	  	
- 	 	 let   deviceId = "AAAA" in
- 	 	  let  dataId = "BBBB" in
+ 	 	   let   deviceId = "AAA" in
+ 	 	  let  dataId = "BBB" in
  			if os_monitor==true then (
 						deviceId = "os_monitor" ;
 						dataId = "memory" 
 						)else (
 						match twitt with
 						 | true ->
-						deviceId = "twitter";
+						 deviceId = "twitter";
 						dataId = "sentiment"
-						);
+						); 
 						
 						Logs_lwt.info (fun m -> m "LLA deviceId is %s " deviceId) >>= fun () ->
 						Logs_lwt.info (fun m -> m "LLA dataId is %s " dataId) >>= fun () ->
-						
-  reqJson= Str.global_replace (Str.regexp_string "*1") deviceId reqJson;
-		Logs_lwt.info (fun m -> m "LLA deviceId reqJson is %s " reqJson) >>= fun () ->
-  reqJson= Str.global_replace (Str.regexp_string "*2") dataId reqJson ;
-  Logs_lwt.info (fun m -> m "LLA dataId reqJson is %s " reqJson) >>= fun () ->
+				    						
+ let reqJsonDevice= Str.global_replace (Str.regexp_string "*1") deviceId reqJsonContent in
+		Logs_lwt.info (fun m -> m "LLA deviceId reqJson is %s " reqJsonDevice) >>= fun () ->
+ let reqJsonData= Str.global_replace (Str.regexp_string "*2") dataId reqJsonDevice in
+  Logs_lwt.info (fun m -> m "LLA dataId reqJson is %s " reqJsonData) >>= fun () ->
   
   let requestJson=reqJson in
   Logs_lwt.info (fun m -> m "LLA new json requestJson is %s " requestJson) >>= fun () ->
