@@ -295,10 +295,10 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
         match os_monitor with 
 		  | true ->
 		   Logs_lwt.info (fun m -> m "[macaroon] macaroon matched os_monitor!! >>>>>>>") >>= fun () ->
-			let deviceId = "os_monitor" in
-			 let reqJsonDevice= Str.global_replace (Str.regexp_string "*1") deviceId reqJsonContent in
+			let driverId = "os_monitor" in
+			 let reqJsonDriver= Str.global_replace (Str.regexp_string "*1") driverId reqJsonContent in
 			let dataId = "memory" in
-			 let reqJsonData= Str.global_replace (Str.regexp_string "*2") dataId reqJsonDevice in
+			 let reqJsonData= Str.global_replace (Str.regexp_string "*2") dataId reqJsonDriver in
 			Logs_lwt.info (fun m -> m "LLA edited reqJsonData>>>>>>> is %s " reqJsonData) >>= fun () ->			
 			let requestJson=reqJsonData in
 			
@@ -320,10 +320,10 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
 	(match twitt with 
 	 | true -> Logs_lwt.info (fun m -> m "[macaroon] macaroon matched twitt!! >>>>>>>") >>= fun () ->
 			 Logs_lwt.info (fun m -> m "[macaroon] macaroon matched os_monitor!! >>>>>>>") >>= fun () ->
-			let deviceId = "twitter" in
-			 let reqJsonDevice= Str.global_replace (Str.regexp_string "*1") deviceId reqJsonContent in
+			let driverId = "twitter" in
+			 let reqJsonDriver= Str.global_replace (Str.regexp_string "*1") driverId reqJsonContent in
 			let dataId = "sentiment" in
-			 let reqJsonData= Str.global_replace (Str.regexp_string "*2") dataId reqJsonDevice in
+			 let reqJsonData= Str.global_replace (Str.regexp_string "*2") dataId reqJsonDriver in
 			Logs_lwt.info (fun m -> m "LLA edited reqJsonData>>>>>>> is %s " reqJsonData) >>= fun () ->	
 			
 			let requestJson=reqJsonData in
