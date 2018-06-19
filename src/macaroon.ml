@@ -327,7 +327,7 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
 			Logs_lwt.info (fun m -> m "LLA edited reqJsonData>>>>>>> is %s " reqJsonData) >>= fun () ->	
 			
 			let requestJson=reqJsonData in
-			 let uri = Uri.of_string "http://52.185.136.17:8080/databox_gw/data/create" in 
+			 let uri = Uri.of_string "http://13.78.45.146:8080/databox_gw/data/create" in 
        let gw_req_body =requestJson in
 		Cohttp_lwt_unix.Client.post 
 	   ~headers:(Cohttp.Header.init_with "Content-Type" "application/json")
