@@ -264,8 +264,9 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
  	let str11="location" in 	
  	  	let os_monitor=contains b str11 in 
  	  	let twitt=contains b str11 in 
- 	  	let rec twitt =
-    if twitt == true then twitt=true else os_monitor=false;;
+ 	  
+    if twitt == true then os_monitor=false else twitt=true 
+    
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str1(app-os-monitor)  %b" os_monitor) >>= fun () ->
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str11(twitter-app)  %b" twitt) >>= fun () ->
  	 	  
