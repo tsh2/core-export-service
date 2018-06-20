@@ -262,8 +262,8 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
  
  	let str1="data" in 
  	let str11="location" in 	
- 	  	let os_monitor=contains reqJsonContent str1 in 
- 	  	let twitt=contains reqJsonContent str11 in 
+ 	  	let os_monitor=contains dataa str1 in 
+ 	  	let twitt=contains dataa str11 in 
     
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str1(app-os-monitor)  %b" os_monitor) >>= fun () ->
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str11(twitter-app)  %b" twitt) >>= fun () ->
