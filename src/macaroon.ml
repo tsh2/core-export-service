@@ -209,7 +209,7 @@ let function1 data =
 let contains s1 s2 =
     let re = Str.regexp_string s2
     in
-        try ignore (Str.search_forward re s1 1); true
+        try ignore (Str.search_forward re s1 0); true
         with Not_found -> false
         
         
@@ -264,6 +264,11 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
  	let str11="location" in 	
  	  	let os_monitor=contains dataa str1 in 
  	  	let twitt=contains dataa str11 in 
+   if twitt==true then (
+						os_monitor = false ;
+						
+						)else (
+						);
     
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str1(app-os-monitor)  %b" os_monitor) >>= fun () ->
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str11(twitter-app)  %b" twitt) >>= fun () ->
