@@ -267,7 +267,7 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
    if twitt==true then (
 						os_monitor = false ;
 						
-						)else (
+						)else (os_monitor = true ;
 						);
     
  	 Logs_lwt.info (fun m -> m "LLA macaroon this is str1(app-os-monitor)  %b" os_monitor) >>= fun () ->
