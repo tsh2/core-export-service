@@ -209,7 +209,7 @@ let function1 data =
 let contains s1 s2 =
     let re = Str.regexp_string s2
     in
-        try ignore (Str.contains re s1 0); true
+        try ignore (Str.search_backward re s1 0); true
         with Not_found -> false
         
         
