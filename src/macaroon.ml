@@ -207,7 +207,7 @@ let function1 data =
    
    (*LLA added Function for string contains app name*)
 let contains s1 s2 =
-    let re = Str.regexp_string s2
+    let re = Str.is_prefix s2
     in
         try ignore (Str.search_forward re s1 0); true
         with Not_found -> false
