@@ -209,7 +209,7 @@ let function1 data =
 let contains s1 s2 =
     let re = Str.regexp_string s2
     in
-        try ignore (Str.string_match re s1 0); true
+        try ignore (Str.search_forward re s1 0); true
         with Not_found -> false
         
         
@@ -259,20 +259,12 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
     let dest = extract_destination b in
         
    Logs_lwt.info (fun m -> m "LLA EDITING START for body content and add new column  ") >>= fun () ->
- 
+   
  	let str1="data" in 
- 	let str11="location" in 	
- 	  let twitt=contains dataa str11 in 
- 	    let  os_monitor=contains dataa str1 in  	
- 			
- 			if twitt then (
-						os_monitor=false
-						)else (
-						os_monitor=true
-						);
-
- 	 Logs_lwt.info (fun m -> m "LLA macaroon this is str1(app-os-monitor)  %b" os_monitor) >>= fun () ->
- 	 Logs_lwt.info (fun m -> m "LLA macaroon this is str11(twitter-app)  %b" twitt) >>= fun () ->
+ 	let str11="location" in	  	
+ 	  	let twitt=contains dataa str11 in 
+ 	  	
+ 	  	 	 Logs_lwt.info (fun m -> m "LLA macaroon this is str11(twitter-app)  %b" twitt) >>= fun () ->
  	 	  
 			
     let macaroon = extract_macaroon headers in
@@ -299,33 +291,9 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
         (*LLA added start*)
         Logs_lwt.info (fun m -> m "[macaroon] LLA Json Body edit is start") >>= fun () ->
        
-        match os_monitor with 
+        match twitt with 
 		  | true ->
-		   Logs_lwt.info (fun m -> m "[macaroon] macaroon matched os_monitor!! >>>>>>>") >>= fun () ->
-			let driverId = "os_monitor" in
-			 let reqJsonDriver= Str.global_replace (Str.regexp_string "*1") driverId reqJsonContent in
-			let dataId = "memory" in
-			 let reqJsonData= Str.global_replace (Str.regexp_string "*2") dataId reqJsonDriver in
-			Logs_lwt.info (fun m -> m "LLA edited reqJsonData>>>>>>> is %s " reqJsonData) >>= fun () ->			
-			let requestJson=reqJsonData in
-			
-        let uri = Uri.of_string "http://13.78.45.146:8080/databox_gw/data/create" in 
-       let gw_req_body =requestJson in
-		Cohttp_lwt_unix.Client.post 
-	   ~headers:(Cohttp.Header.init_with "Content-Type" "application/json")
-       ~body:(Cohttp_lwt_body.of_string requestJson) uri >>= fun (resp, gw_req_body) ->
-        Cohttp_lwt_body.to_string gw_req_body >>= fun gw_req_body ->
-        Logs_lwt.info (fun m -> m "LLA macaroon inside post response gw_req_body  %s" gw_req_body ) >>= fun () ->	
-     (*end*)
-     
-     let b = Cohttp_lwt_body.of_string b in
-        let id = Macaroon.identifier @@ R.get_ok macaroon in
-        let req = Request.({(with_client_id req id)  with body = b}) in
-        handler req
-      
-	  | false ->
-	(match twitt with 
-	 | true -> Logs_lwt.info (fun m -> m "[macaroon] macaroon matched twitt!! >>>>>>>") >>= fun () ->
+		     Logs_lwt.info (fun m -> m "[macaroon] macaroon matched twitt!! >>>>>>>") >>= fun () ->
 			 Logs_lwt.info (fun m -> m "[macaroon] macaroon matched os_monitor!! >>>>>>>") >>= fun () ->
 			let driverId = "twitter" in
 			 let reqJsonDriver= Str.global_replace (Str.regexp_string "*1") driverId reqJsonContent in
@@ -346,8 +314,35 @@ Logs_lwt.info (fun m -> m "LLA macaroon inside post yojson data   %s" dataa ) >>
       let b = Cohttp_lwt_body.of_string b in
         let id = Macaroon.identifier @@ R.get_ok macaroon in
         let req = Request.({(with_client_id req id)  with body = b}) in
+        handler req
+      
+	  | false ->
+	   let  os_monitor=contains dataa str1 in	   
+ 	   Logs_lwt.info (fun m -> m "LLA macaroon this is str1(app-os-monitor)  %b" os_monitor) >>= fun () ->
+ 	 
+	(match os_monitor with 
+	 | true ->       
+         Logs_lwt.info (fun m -> m "[macaroon] macaroon matched os_monitor!! >>>>>>>") >>= fun () ->
+			let driverId = "os_monitor" in
+			 let reqJsonDriver= Str.global_replace (Str.regexp_string "*1") driverId reqJsonContent in
+			let dataId = "memory" in
+			 let reqJsonData= Str.global_replace (Str.regexp_string "*2") dataId reqJsonDriver in
+			Logs_lwt.info (fun m -> m "LLA edited reqJsonData>>>>>>> is %s " reqJsonData) >>= fun () ->			
+			let requestJson=reqJsonData in
+			
+        let uri = Uri.of_string "http://13.78.45.146:8080/databox_gw/data/create" in 
+       let gw_req_body =requestJson in
+		Cohttp_lwt_unix.Client.post 
+	   ~headers:(Cohttp.Header.init_with "Content-Type" "application/json")
+       ~body:(Cohttp_lwt_body.of_string requestJson) uri >>= fun (resp, gw_req_body) ->
+        Cohttp_lwt_body.to_string gw_req_body >>= fun gw_req_body ->
+        Logs_lwt.info (fun m -> m "LLA macaroon inside post response gw_req_body  %s" gw_req_body ) >>= fun () ->	
+     (*end*)
+     
+     let b = Cohttp_lwt_body.of_string b in
+        let id = Macaroon.identifier @@ R.get_ok macaroon in
+        let req = Request.({(with_client_id req id)  with body = b}) in
         handler req)
-       
             
     | false ->
         let info = "Invalid API key/token" in
